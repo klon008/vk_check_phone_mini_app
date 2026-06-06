@@ -12,14 +12,30 @@
     if (!raw) {
       return 0;
     }
-    const match = String(raw).match(/group_(\d+)/);
-    return match ? Number(match[1]) : 0;
+    const value = String(raw).trim();
+    const prefixed = value.match(/group_(\d+)/);
+    if (prefixed) {
+      return Number(prefixed[1]);
+    }
+    if (/^\d+$/.test(value)) {
+      return Number(value);
+    }
+    return 0;
+  }
+
+  function readConfiguredGroupId() {
+    const config = window.APP_CONFIG || {};
+    return Number(config.groupId || 0);
   }
 
   async function getGroupId() {
-    const params = await vkBridge.send("VKWebAppGetLaunchParams");
+    let groupId = readConfiguredGroupId();
+    if (groupId) {
+      return groupId;
+    }
 
-    let groupId = Number(params.vk_group_id || params.group_id || 0);
+    const params = await vkBridge.send("VKWebAppGetLaunchParams");
+    groupId = Number(params.vk_group_id || params.group_id || 0);
     if (groupId) {
       return groupId;
     }
@@ -35,12 +51,19 @@
       return groupId;
     }
 
+    groupId = Number(search.get("group_id") || search.get("vk_group_id") || 0);
+    if (groupId) {
+      return groupId;
+    }
+
     groupId = parseGroupIdFromHashValue(window.location.hash.replace(/^#/, ""));
     if (groupId) {
       return groupId;
     }
 
-    throw new Error("Не удалось определить сообщество. Откройте приложение из чата бота.");
+    throw new Error(
+      "Не удалось определить сообщество. Укажите groupId в config.js (как VK_GROUP_ID в .env бота)."
+    );
   }
 
   async function verifyPhone() {
