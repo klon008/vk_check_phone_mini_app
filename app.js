@@ -85,11 +85,11 @@
 
       await vkBridge.send("VKWebAppSendPayload", {
         group_id: groupId,
-        payload: JSON.stringify({
+        payload: {
           action: "phone_verified",
           phone: phone,
           sign: sign,
-        }),
+        },
       });
 
       setStatus("Готово. Вернитесь в чат с ботом.");
