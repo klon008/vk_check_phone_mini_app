@@ -71,9 +71,31 @@
     }
   }
 
+  function describeVkError(error) {
+    const code = error && error.error_data && error.error_data.error_code;
+    const msg = error && error.error_data && error.error_data.error_msg;
+
+    if (code === "711" || code === 711) {
+      return (
+        "Mini App не установлено в сообществе (ошибка VK 711).\n\n" +
+        "Что сделать:\n" +
+        "1. dev.vk.com → ваше приложение → включите «Разрешить установку в сообществах»\n" +
+        "2. Сообщество → Управление → Приложения → Добавить → выберите это mini app\n" +
+        "3. Long Poll API группы: событие app_payload должно быть включено"
+      );
+    }
+
+    if (msg) {
+      return String(msg);
+    }
+
+    return error && error.message ? String(error.message) : "Неизвестная ошибка";
+  }
+
   function showDebugError(error, context, extra) {
+    const hint = describeVkError(error);
     const message = formatDebugError(error, context, extra);
-    debugLines.push(`ERROR ${message}`);
+    debugLines.push(`ERROR ${hint}\n\n${message}`);
     console.error(message);
     setStatus(debugLines.join("\n\n"), true);
   }

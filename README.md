@@ -11,6 +11,15 @@ VK Mini App для подтверждения номера телефона че
 
 Этот URL укажите в настройках VK Mini App на [dev.vk.com](https://dev.vk.com).
 
+## Установка в сообщество (обязательно)
+
+`VKWebAppSendPayload` работает **только если mini app установлено в том же сообществе**, что и бот.
+Иначе VK вернёт ошибку **711**: *Application is not installed in community*.
+
+1. [dev.vk.com](https://dev.vk.com) → приложение → **«Разрешить установку в сообществах»**
+2. Сообщество бота → **Управление → Приложения → Добавить** → выберите mini app
+3. Long Poll API группы: включено событие **`app_payload`**
+
 ## config.js
 
 VK **не передаёт** `vk_group_id` при открытии из кнопки `open_app` в чате бота.
