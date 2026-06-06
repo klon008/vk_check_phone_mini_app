@@ -21,8 +21,6 @@
     setStatus("Запрашиваем доступ к номеру...");
 
     try {
-      await vkBridge.send("VKWebAppInit");
-
       const phoneData = await vkBridge.send("VKWebAppGetPhoneNumber");
       const phone = String(phoneData.phone_number || "").trim();
       const sign = String(phoneData.sign || "").trim();
@@ -54,5 +52,14 @@
     }
   }
 
-  buttonEl.addEventListener("click", verifyPhone);
+  async function init() {
+    try {
+      await vkBridge.send("VKWebAppInit");
+      buttonEl.addEventListener("click", verifyPhone);
+    } catch (error) {
+      setStatus("Не удалось инициализировать приложение.", true);
+    }
+  }
+
+  init();
 })();

@@ -11,9 +11,12 @@ VK Mini App для подтверждения номера телефона че
 
 Этот URL укажите в настройках VK Mini App на [dev.vk.com](https://dev.vk.com).
 
-## Обновление
+## Связь с ботом
 
-При изменении mini-app в основном проекте скопируйте сюда `index.html` и `app.js`, затем:
+В репозитории бота `mini-app/` — симлинк на эту папку (`E:\Work\vk_check_phone_mini_app`).
+Правки mini-app делаются здесь; деплой — push в этот репозиторий.
+
+## Деплой
 
 ```powershell
 git add index.html app.js
